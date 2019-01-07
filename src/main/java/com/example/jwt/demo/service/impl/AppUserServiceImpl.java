@@ -1,16 +1,22 @@
 package com.example.jwt.demo.service.impl;
 
+import com.example.jwt.demo.configuration.ApiParameters;
 import com.example.jwt.demo.dto.AppUserDTO;
 import com.example.jwt.demo.exception.CustomException;
+import com.example.jwt.demo.jwt.JwtGenerator;
 import com.example.jwt.demo.model.AppUser;
+import com.example.jwt.demo.model.AuthToken;
 import com.example.jwt.demo.model.enums.UserRole;
 import com.example.jwt.demo.repository.UserRepository;
 import com.example.jwt.demo.service.AppUserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -95,6 +101,58 @@ public class AppUserServiceImpl implements AppUserService {
         }
     }
 
+    @Override
+    public ResponseEntity<?> loginUser(AppUserDTO appUserDTO) {
+
+
+        AppUser validCmsUser = userRepository.validateUser(appUserDTO.getEmail());
+        if (validCmsUser == null) {
+            return new ResponseEntity<>("Invalid login Credentials!", HttpStatus.UNAUTHORIZED);
+        } else if (bCryptPasswordEncoder.matches(appUserDTO.getPassword(), validCmsUser.getPassword())) {
+
+            String accessToken = createJwtWithoutPrefix(validCmsUser);
+            String refreshToken = createRefreshToken(validCmsUser);
+            AuthToken authToken = new AuthToken();
+            authToken.setAccess_token(accessToken);
+            authToken.setRefresh_token(refreshToken);
+            return new ResponseEntity<>(authToken, HttpStatus.OK);
+
+        } else {
+            return new ResponseEntity<>("Invalid login Credentials", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> getRefreshToken(String refresh_token) {
+        try {
+            AppUser cmsUser = userRepository.findByRefreshToken(refresh_token);
+
+            if (cmsUser == null) {
+                return new ResponseEntity<>("Invalid refresh_token", HttpStatus.UNAUTHORIZED);
+            }
+            AuthToken authToken = createAuthToken(createJwtWithoutPrefix(cmsUser), createRefreshToken(cmsUser));
+            return new ResponseEntity<>(authToken, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new CustomException("Cannot obtain a new access token");
+        }
+    }
+
+    private String createJwtWithoutPrefix(AppUser appUser) {
+        List<SimpleGrantedAuthority> grantedAuthorities = new ArrayList<>();
+        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + appUser.getUser_role()));
+        String accessToken = JwtGenerator.generateAccessJWT(appUser.getUsername(), appUser.getEmail(), grantedAuthorities, ApiParameters.JWT_EXPIRATION, ApiParameters.JWT_SECRET);
+        return accessToken;
+    }
+
+    private String createRefreshToken(AppUser appUser) {
+        List<SimpleGrantedAuthority> grantedAuthorityList = new ArrayList<>();
+        grantedAuthorityList.add(new SimpleGrantedAuthority("ROLE_" + appUser.getUser_role()));
+        String refreshToken = JwtGenerator.generateRefreshToken(appUser.getUsername(), appUser.getEmail(), grantedAuthorityList, ApiParameters.REFRESH_TOKEN_EXPIRATION, ApiParameters.JWT_SECRET);
+        userRepository.updateRefreshToken(appUser.getEmail(), refreshToken);
+        return refreshToken;
+    }
+
+
     private AppUser dTOToEntity(AppUserDTO appUserDTO) {
         AppUser appUser = new AppUser();
         appUser.setUsername(appUserDTO.getUsername());
@@ -112,6 +170,13 @@ public class AppUserServiceImpl implements AppUserService {
         appUserDTO.setUser_role(appUser.getUser_role());
         appUserDTO.setRefesh_token(appUser.getRefesh_token());
         return appUserDTO;
+    }
+
+    private AuthToken createAuthToken(String accessToken, String refreshToken) {
+        AuthToken authToken = new AuthToken();
+        authToken.setAccess_token(accessToken);
+        authToken.setRefresh_token(refreshToken);
+        return authToken;
     }
 
 }

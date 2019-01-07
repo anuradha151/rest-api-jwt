@@ -12,4 +12,8 @@ public interface AppUserService {
 
     ResponseEntity<?> searchUser(int user_id);
 
+    ResponseEntity<?> getRefreshToken(String refresh_token);
+
+    ResponseEntity<?> loginUser(AppUserDTO appUserDTO);
+
 }
