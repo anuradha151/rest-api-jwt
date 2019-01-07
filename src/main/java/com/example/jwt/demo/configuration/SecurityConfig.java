@@ -80,32 +80,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/mobile/getaccesstoken").permitAll()
                 .antMatchers("/mobile/users/**").permitAll()
                 .antMatchers("users/**").hasRole("Farmer")
-                .antMatchers("check/**").permitAll()
-                .antMatchers("/swagger-ui.html").permitAll()
-                .antMatchers("/v2/api-docs").permitAll()
-                .antMatchers("/reports/**").hasRole("Admin")
-                .antMatchers("/crop_categories/**").hasRole("Admin")
-                .antMatchers("/agent/**").hasRole("Admin")
-                .antMatchers("/content/**").hasRole("Admin")
-                .antMatchers("/content_details/**").hasRole("Admin")
-                .antMatchers("/crop/save").hasRole("Admin")
-                .antMatchers("/crop/get-all-crops").hasRole("Admin")
-/*                .antMatchers("/crop/**").hasRole("Admin")
-                .antMatchers("/crop/**").hasRole("Farmer")*/
-                .antMatchers("/crop/set-prices").hasRole("Admin")
-                .antMatchers("/district/**").hasRole("Admin")
-                .antMatchers("/parameter/**").hasRole("Admin")
-                .antMatchers("/test_number/**").hasRole("Admin")
-                .antMatchers("/cms_user/login").permitAll()
-                .antMatchers("/cms_user/save").permitAll()
-                .antMatchers("/mobile/menu/**").hasRole("Farmer")
-                .antMatchers("/mobile/getAccessToken").permitAll()
-                .antMatchers("/mobile/version/**").permitAll()
-                .antMatchers("/mobile/content/**").hasRole("Farmer")
-                .antMatchers("/reports/**").permitAll()
-                .antMatchers("/reports/**").permitAll()
-                .antMatchers("/uploads/**").permitAll()
-                .antMatchers("/mobile/crop-params/**").hasRole("Farmer")
+
                 .anyRequest().authenticated();
     }
 }
