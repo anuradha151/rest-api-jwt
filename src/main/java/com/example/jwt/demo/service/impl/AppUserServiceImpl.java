@@ -1,6 +1,7 @@
 package com.example.jwt.demo.service.impl;
 
 import com.example.jwt.demo.dto.AppUserDTO;
+import com.example.jwt.demo.exception.CustomException;
 import com.example.jwt.demo.model.AppUser;
 import com.example.jwt.demo.model.enums.UserRole;
 import com.example.jwt.demo.repository.UserRepository;
@@ -38,7 +39,7 @@ public class AppUserServiceImpl implements AppUserService {
                 return new ResponseEntity<>("Failed to save user", HttpStatus.BAD_REQUEST);
             }
         } catch (Exception e) {
-            throw new RuntimeException("Failed to save user");
+            throw new CustomException("Failed to save user");
         }
     }
 
@@ -58,7 +59,7 @@ public class AppUserServiceImpl implements AppUserService {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
         } catch (Exception e) {
-            throw new RuntimeException("Update unsuccessful");
+            throw new CustomException("Update unsuccessful");
         }
 
     }
@@ -74,7 +75,7 @@ public class AppUserServiceImpl implements AppUserService {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
         } catch (Exception e) {
-            throw new RuntimeException("Data removal unsuccessful");
+            throw new CustomException("Data removal unsuccessful");
         }
     }
 
@@ -90,7 +91,7 @@ public class AppUserServiceImpl implements AppUserService {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
         } catch (Exception e) {
-            throw new RuntimeException("Error occurred while fetching data");
+            throw new CustomException("Error occurred while fetching data");
         }
     }
 
