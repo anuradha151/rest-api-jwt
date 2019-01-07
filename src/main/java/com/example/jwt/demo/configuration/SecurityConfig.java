@@ -1,7 +1,6 @@
 package com.example.jwt.demo.configuration;
 
 
-
 import com.example.jwt.demo.jwt.JwtTokenAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -76,10 +75,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .antMatchers(config.getUrl()).permitAll()
-                .antMatchers("/mobile/login").permitAll()
-                .antMatchers("/mobile/getaccesstoken").permitAll()
-                .antMatchers("/mobile/users/**").permitAll()
-                .antMatchers("users/**").hasRole("Farmer")
+
+                .antMatchers("/app_user/login").permitAll()
+                .antMatchers("/app_user/save").permitAll()
 
                 .anyRequest().authenticated();
     }
