@@ -1,7 +1,7 @@
 # Spring security JWT 💯
 [![Build Status](https://travis-ci.org/codecentric/springboot-sample-app.svg?branch=master)](https://travis-ci.org/codecentric/springboot-sample-app)
 [![Coverage Status](https://coveralls.io/repos/github/codecentric/springboot-sample-app/badge.svg?branch=master)](https://coveralls.io/github/codecentric/springboot-sample-app?branch=master)
-[![downloads][8]][9] [![js-standard-style][10]][11]
+
 
 Authentication and authorization in spring-security and JWT 
 
@@ -38,6 +38,6 @@ mvn spring-boot:run
 
 ## Authors
 
-* **Anuradha Ranasinghe** - *Initial work* - [PurpleBooth](https://github.com/anuradha151)
+* **Anuradha Ranasinghe** - *Profile* - [Profile](https://github.com/anuradha151)
 
 
