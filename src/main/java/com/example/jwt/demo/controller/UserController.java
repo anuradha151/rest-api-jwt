@@ -3,6 +3,7 @@ package com.example.jwt.demo.controller;
 import com.example.jwt.demo.dto.AppUserDTO;
 import com.example.jwt.demo.exception.CustomException;
 import com.example.jwt.demo.exception.CustomValidateException;
+import com.example.jwt.demo.model.AuthToken;
 import com.example.jwt.demo.service.AppUserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -33,6 +34,7 @@ public class UserController {
         }
         return appUserService.registerUser(appUserDTO);
     }
+
     @PutMapping("/update")
     public ResponseEntity<?> updateUser(@Valid @RequestBody AppUserDTO cmsUserDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -54,12 +56,12 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody AppUserDTO appUserDTO) {
-        return cmsLoginService.loginUser(appUserDTO);
+        return appUserService.loginUser(appUserDTO);
     }
 
     @PostMapping("/getAccessToken")
-    public ResponseEntity<?> getaccesstoken(@RequestBody AuthToken token) throws Exception {
-        return cmsLoginService.getRefreshToken(token.getRefresh_token());
+    public ResponseEntity<?> getaccesstoken(@RequestBody AuthToken token) {
+        return appUserService.getRefreshToken(token.getRefresh_token());
     }
 
 }
