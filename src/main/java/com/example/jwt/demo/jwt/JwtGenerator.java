@@ -1,6 +1,8 @@
 package com.example.jwt.demo.jwt;
 
 
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 

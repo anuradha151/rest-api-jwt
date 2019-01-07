@@ -1,8 +1,9 @@
 package com.example.jwt.demo.jwt;
 
+import com.example.jwt.demo.configuration.JwtAuthenticationConfig;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import lk.arimac.dialog_govi_mithuru.configuration.JwtAuthenticationConfig;
+
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
