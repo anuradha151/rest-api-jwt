@@ -121,12 +121,13 @@ public class AppUserServiceImpl implements AppUserService {
     @Override
     public ResponseEntity<?> getRefreshToken(String refresh_token) {
         try {
-            AppUser cmsUser = userRepository.findByRefreshToken(refresh_token);
+            Optional<AppUser> byRefreshToken = userRepository.findByRefreshToken(refresh_token);
 
-            if (cmsUser == null) {
+
+            if (!byRefreshToken.isPresent()) {
                 return new ResponseEntity<>("Invalid refresh_token", HttpStatus.UNAUTHORIZED);
             }
-            AuthToken authToken = createAuthToken(createJwtWithoutPrefix(cmsUser), createRefreshToken(cmsUser));
+            AuthToken authToken = createAuthToken(createJwtWithoutPrefix(byRefreshToken.get()), createRefreshToken(byRefreshToken.get()));
             return new ResponseEntity<>(authToken, HttpStatus.OK);
         } catch (Exception e) {
             throw new CustomException("Cannot obtain a new access token");
@@ -136,7 +137,7 @@ public class AppUserServiceImpl implements AppUserService {
     private String createJwtWithoutPrefix(AppUser appUser) {
         List<SimpleGrantedAuthority> grantedAuthorities = new ArrayList<>();
         grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + appUser.getUser_role()));
-        String accessToken = JwtGenerator.generateAccessJWT(appUser.getUsername(), appUser.getEmail(), grantedAuthorities, ApiParameters.JWT_EXPIRATION, ApiParameters.JWT_SECRET);
+        String accessToken = JwtGenerator.generateAccessJWT(appUser.getUser_name(), appUser.getUser_email(), grantedAuthorities, ApiParameters.JWT_EXPIRATION, ApiParameters.JWT_SECRET);
         return accessToken;
     }
 
