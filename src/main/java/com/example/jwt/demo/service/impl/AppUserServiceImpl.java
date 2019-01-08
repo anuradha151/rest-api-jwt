@@ -103,20 +103,16 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Override
     public ResponseEntity<?> loginUser(AppUserDTO appUserDTO) {
-
-
-        AppUser validCmsUser = userRepository.validateUser(appUserDTO.getEmail());
-        if (validCmsUser == null) {
+        Optional<AppUser> appUser = userRepository.validateUser(appUserDTO.getEmail());
+        if (!appUser.isPresent()) {
             return new ResponseEntity<>("Invalid login Credentials!", HttpStatus.UNAUTHORIZED);
-        } else if (bCryptPasswordEncoder.matches(appUserDTO.getPassword(), validCmsUser.getPassword())) {
-
-            String accessToken = createJwtWithoutPrefix(validCmsUser);
-            String refreshToken = createRefreshToken(validCmsUser);
+        } else if (bCryptPasswordEncoder.matches(appUserDTO.getPassword(), appUser.get().getUser_password())) {
+            String accessToken = createJwtWithoutPrefix(appUser.get());
+            String refreshToken = createRefreshToken(appUser.get());
             AuthToken authToken = new AuthToken();
             authToken.setAccess_token(accessToken);
             authToken.setRefresh_token(refreshToken);
             return new ResponseEntity<>(authToken, HttpStatus.OK);
-
         } else {
             return new ResponseEntity<>("Invalid login Credentials", HttpStatus.UNAUTHORIZED);
         }
