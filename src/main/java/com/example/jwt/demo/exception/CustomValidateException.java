@@ -8,17 +8,13 @@ import org.springframework.validation.ObjectError;
 @Configuration
 public class CustomValidateException {
 
-
-
     public String validationException(BindingResult bindingResult) {
-
         String validException;
         StringBuilder sbf = new StringBuilder();
-
         for (Object object : bindingResult.getAllErrors()) {
             if (object instanceof ObjectError) {
                 ObjectError objectError = (ObjectError) object;
-                validException=objectError.getDefaultMessage();
+                validException = objectError.getDefaultMessage();
                 sbf.append(validException);
                 sbf.append(" \n ");
             }
