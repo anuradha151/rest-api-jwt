@@ -144,8 +144,8 @@ public class AppUserServiceImpl implements AppUserService {
     private String createRefreshToken(AppUser appUser) {
         List<SimpleGrantedAuthority> grantedAuthorityList = new ArrayList<>();
         grantedAuthorityList.add(new SimpleGrantedAuthority("ROLE_" + appUser.getUser_role()));
-        String refreshToken = JwtGenerator.generateRefreshToken(appUser.getUsername(), appUser.getEmail(), grantedAuthorityList, ApiParameters.REFRESH_TOKEN_EXPIRATION, ApiParameters.JWT_SECRET);
-        userRepository.updateRefreshToken(appUser.getEmail(), refreshToken);
+        String refreshToken = JwtGenerator.generateRefreshToken(appUser.getUser_name(), appUser.getUser_email(), grantedAuthorityList, ApiParameters.REFRESH_TOKEN_EXPIRATION, ApiParameters.JWT_SECRET);
+        userRepository.updateRefreshToken(appUser.getUser_email(), refreshToken);
         return refreshToken;
     }
 
