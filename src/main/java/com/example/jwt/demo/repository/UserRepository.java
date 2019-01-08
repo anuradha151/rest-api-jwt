@@ -12,17 +12,17 @@ public interface UserRepository extends JpaRepository<AppUser, Integer> {
 
 
     @Modifying
-    @Query("update AppUser u set u.refesh_token = :refesh_token WHERE u.email= :email")
+    @Query("update AppUser u set u.refresh_token = :refresh_token WHERE u.user_email= :user_email")
     @Transactional
-    int updateRefreshToken(@Param("email") String email, @Param("refesh_token") String refreshToken);
+    int updateRefreshToken(@Param("user_email") String user_email, @Param("refresh_token") String refreshToken);
 
-    @Query("SELECT u FROM AppUser u WHERE u.email=?1")
-    AppUser getUserByEmail(String email);
+    @Query("SELECT u FROM AppUser u WHERE u.user_email=?1")
+    AppUser getUserByEmail(String user_email);
 
-    @Query("SELECT u FROM AppUser u WHERE u.refesh_token=?1")
-    AppUser findByRefreshToken(String refreshToken);
+    @Query("SELECT u FROM AppUser u WHERE u.refresh_token=?1")
+    AppUser findByRefreshToken(String refresh_token);
 
-    @Query("SELECT u FROM AppUser u WHERE u.email=?1 ")
-    AppUser validateUser(String email);
+    @Query("SELECT u FROM AppUser u WHERE u.user_email=?1 ")
+    AppUser validateUser(String user_email);
 
 }
