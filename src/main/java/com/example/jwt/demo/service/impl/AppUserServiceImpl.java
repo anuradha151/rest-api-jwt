@@ -33,8 +33,8 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Override
     public ResponseEntity<?> registerUser(AppUserDTO appUserDTO) {
-        AppUser userByEmail = userRepository.getUserByEmail(appUserDTO.getEmail());
-        if (userByEmail != null) {
+        Optional<AppUser> userByEmail = userRepository.getUserByEmail(appUserDTO.getUser_email());
+        if (userByEmail.isPresent()) {
             return new ResponseEntity<>("Existing user", HttpStatus.BAD_REQUEST);
         }
         try {
@@ -103,10 +103,10 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Override
     public ResponseEntity<?> loginUser(AppUserDTO appUserDTO) {
-        Optional<AppUser> appUser = userRepository.validateUser(appUserDTO.getEmail());
+        Optional<AppUser> appUser = userRepository.validateUser(appUserDTO.getUser_email());
         if (!appUser.isPresent()) {
             return new ResponseEntity<>("Invalid login Credentials!", HttpStatus.UNAUTHORIZED);
-        } else if (bCryptPasswordEncoder.matches(appUserDTO.getPassword(), appUser.get().getUser_password())) {
+        } else if (bCryptPasswordEncoder.matches(appUserDTO.getUser_password(), appUser.get().getUser_password())) {
             String accessToken = createJwtWithoutPrefix(appUser.get());
             String refreshToken = createRefreshToken(appUser.get());
             AuthToken authToken = new AuthToken();
@@ -152,20 +152,20 @@ public class AppUserServiceImpl implements AppUserService {
 
     private AppUser dTOToEntity(AppUserDTO appUserDTO) {
         AppUser appUser = new AppUser();
-        appUser.setUsername(appUserDTO.getUsername());
-        appUser.setEmail(appUserDTO.getEmail());
-        appUser.setPassword(bCryptPasswordEncoder.encode(appUserDTO.getPassword()));
+        appUser.setUser_name(appUserDTO.getUser_name());
+        appUser.setUser_email(appUserDTO.getUser_email());
+        appUser.setUser_password(bCryptPasswordEncoder.encode(appUserDTO.getUser_password()));
         appUser.setUser_role(UserRole.ADMIN.toString());
-        appUser.setRefesh_token(appUserDTO.getRefesh_token());
+        appUser.setRefresh_token(appUserDTO.getRefresh_token());
         return appUser;
     }
 
     private AppUserDTO entityToDTO(AppUser appUser) {
         AppUserDTO appUserDTO = new AppUserDTO();
-        appUserDTO.setUsername(appUser.getUsername());
-        appUserDTO.setEmail(appUser.getEmail());
+        appUserDTO.setUser_name(appUser.getUser_name());
+        appUserDTO.setUser_email(appUser.getUser_email());
         appUserDTO.setUser_role(appUser.getUser_role());
-        appUserDTO.setRefesh_token(appUser.getRefesh_token());
+        appUserDTO.setRefresh_token(appUser.getRefresh_token());
         return appUserDTO;
     }
 
