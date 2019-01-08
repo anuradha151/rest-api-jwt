@@ -13,39 +13,38 @@ public class AppUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int user_id;
     @Column(nullable = false)
-    private String username;
+    private String user_name;
     @Column(nullable = false)
-    private String email;
+    private String user_email;
     @Column(nullable = false)
-    private String password;
+    private String user_password;
     @Column(columnDefinition = "Varchar(100) default 'Admin'")
     private String user_role = "Admin";
     @JsonIgnore
-    private String refesh_token;
+    private String refresh_token;
 
     public AppUser() {
     }
 
-    public AppUser(String username, String email, String password, String user_role, String refesh_token) {
-        this.setUsername(username);
-        this.setEmail(email);
-        this.setPassword(password);
+    public AppUser(String user_name, String user_email, String user_password, String user_role, String refresh_token) {
+        this.setUser_name(user_name);
+        this.setUser_email(user_email);
+        this.setUser_password(user_password);
         this.setUser_role(user_role);
-        this.setRefesh_token(refesh_token);
+        this.setRefresh_token(refresh_token);
     }
 
     @Override
     public String toString() {
         return "AppUser{" +
-                "user_id=" + getUser_id() +
-                ", username='" + getUsername() + '\'' +
-                ", email='" + getEmail() + '\'' +
-                ", password='" + getPassword() + '\'' +
-                ", user_role='" + getUser_role() + '\'' +
-                ", refesh_token='" + getRefesh_token() + '\'' +
+                "user_id=" + user_id +
+                ", user_name='" + user_name + '\'' +
+                ", user_email='" + user_email + '\'' +
+                ", user_password='" + user_password + '\'' +
+                ", user_role='" + user_role + '\'' +
+                ", refresh_token='" + refresh_token + '\'' +
                 '}';
     }
-
 
     public int getUser_id() {
         return user_id;
@@ -55,28 +54,28 @@ public class AppUser {
         this.user_id = user_id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUser_name() {
+        return user_name;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUser_email() {
+        return user_email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUser_email(String user_email) {
+        this.user_email = user_email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getUser_password() {
+        return user_password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setUser_password(String user_password) {
+        this.user_password = user_password;
     }
 
     public String getUser_role() {
@@ -87,11 +86,11 @@ public class AppUser {
         this.user_role = user_role;
     }
 
-    public String getRefesh_token() {
-        return refesh_token;
+    public String getRefresh_token() {
+        return refresh_token;
     }
 
-    public void setRefesh_token(String refesh_token) {
-        this.refesh_token = refesh_token;
+    public void setRefresh_token(String refresh_token) {
+        this.refresh_token = refresh_token;
     }
 }
